@@ -1,0 +1,66 @@
+server:
+  # 端口号
+  port: 8888
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3308/summary?characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 1000MB
+      max-request-size: 1000MB
+
+
+
+# MyBatis-Plus相关配置
+mybatis-plus:
+  #  mapper-locations: mapper/**/*.xml  # 自定义映射文件路径，默认为mapper/**/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl    # 配置日志
+  # 全局配置
+  global-config:
+    db-config:
+      # table-prefix: t_      # 设置所有表的通用前缀名称为t_
+      id-type: auto      # 设置主键的生成策略（assign_id雪花算法，auto自增）
+      logic-delete-field: delFlag # 全局逻辑删除的实体字段名
+      logic-delete-value: 1  # 代表已删除
+      logic-not-delete-value: 0 # 代表未删除
+
+#（1）找到minio目录的minio.exe，并在minio目录创建四个目录data1、data2、data3、data4
+#（2）右键minio.exe选择打开命令窗口
+#（3）命令窗口输入 cd minio 在命令窗口进入minio目录
+#（4）命令窗口输入 minio.exe server ./data1 ./data2 ./data3 ./data4 启动minio
+#（5）进入minio创建两个桶：mediafiles、videofiles
+# MinIO注意事项：存储桶名称必须介于 3 到 63 个字符之间、桶名只能包含字母、数字或连字符、不能以连字符为开头或结尾
+minio:
+  endpoint: http://localhost:9000 # 端口地址
+  accessKey: minioadmin # 账号
+  secretKey: minioadmin # 密码
+  extend: # 扩展配置
+    defaultBucket: default-bucket # 全局默认桶（默认为default-bucket）
+    createBucket: true # 当桶不存在时是否自动创建桶，默认为true
+    checkBucket: true # 启动时是否检查桶是否存在，默认为true
+    connectTimeout: 0 # HTTP连接超时时间，以毫秒为单位，默认为0，表示没有超时时间
+    writeTimeout: 0 # HTTP写入超时时间，以毫秒为单位，默认为0，表示没有超时时间
+    readTimeout: 0 # HTTP读取超时时间，以毫秒为单位，默认为0，表示没有超时时间
+  bucket:
+    mediafiles: mediafiles # 存放媒资文件的桶
+    videofiles: videofiles # 存放视频文件的桶
+
+xxl:
+  job:
+    admin:
+      addresses: http://192.168.101.65:8088/xxl-job-admin
+    executor:
+      appname: media-process-service
+      address:
+      ip:
+      port: 9999
+      logpath: /data/applogs/xxl-job/jobhandler
+      logretentiondays: 30
+    accessToken: default_token
+
+videoprocess:
+  ffmpegpath: D:/soft/ffmpeg/ffmpeg.exe

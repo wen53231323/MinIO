@@ -1,0 +1,21 @@
+#（1）找到minio目录的minio.exe，并在minio目录创建四个目录data1、data2、data3、data4
+#（2）右键minio.exe选择打开命令窗口
+#（3）命令窗口输入 cd minio 在命令窗口进入minio目录
+#（4）命令窗口输入 minio.exe server ./data1 ./data2 ./data3 ./data4 启动minio
+#（5）进入minio创建两个桶：mediafiles、videofiles
+# MinIO注意事项：存储桶名称必须介于 3 到 63 个字符之间、桶名只能包含字母、数字或连字符、不能以连字符为开头或结尾
+
+minio:
+  endpoint: http://localhost:9000 # 端口地址
+  accessKey: minioadmin # 账号
+  secretKey: minioadmin # 密码
+  extend: # 扩展配置
+    defaultBucket: default-bucket # 全局默认桶（默认为default-bucket）
+    createBucket: true # 当桶不存在时是否自动创建桶，默认为true
+    checkBucket: true # 启动时是否检查桶是否存在，默认为true
+    connectTimeout: 0 # HTTP连接超时时间，以毫秒为单位，默认为0，表示没有超时时间
+    writeTimeout: 0 # HTTP写入超时时间，以毫秒为单位，默认为0，表示没有超时时间
+    readTimeout: 0 # HTTP读取超时时间，以毫秒为单位，默认为0，表示没有超时时间
+  bucket:
+    mediafiles: mediafiles # 存放媒资文件的桶
+    videofiles: videofiles # 存放视频文件的桶
